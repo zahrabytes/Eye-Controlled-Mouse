@@ -1,10 +1,11 @@
 import cv2
 import mediapipe as mp #shortname mp
 
-face_mesh = mp.solutions.face_mesh.FaceMesh() #capture a face mesh called face_mesh
+face_mesh = mp.solutions.face_mesh.FaceMesh(refine_landmarks=True) #capture a face mesh called face_mesh, refine the landmarks on face
 cam = cv2.VideoCapture(0) #captures video, only the first one
 while True: #forever
     _, frame = cam.read()
+    frame = cv2.flip(frame, 1)
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) #convert color of frame bgr to rgb
     output = face_mesh.process(rgb_frame)
     landmark_points = output.multi_face_landmarks #landmarks on face
@@ -12,7 +13,7 @@ while True: #forever
     frame_h, frame_w, _ = frame.shape #shape of video 
     if landmark_points:
         landmarks = landmark_points[0].landmark #only one face
-        for landmark in landmarks:
+        for landmark in landmarks[474:478]: #these four different landmarks are one of your eye
             x = int(landmark.x * frame_w)
             y = int(landmark.y * frame_h)
             cv2.circle(frame,(x,y), 3, (0, 255, 0))
