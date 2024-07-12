@@ -23,20 +23,20 @@ while True: #forever
                 screen_y = screen_h / frame_h * y 
                 pyautogui.moveTo(screen_x, screen_y) #move the cursor
         left = [landmarks[145], landmarks[159]] #top and bottom of eye
-        for landmark in left:
-            x = int(landmark.x * frame_w)
-            y = int(landmark.y * frame_h)
-            cv2.circle(frame,(x,y), 3, (0, 255, 255)) #mark left eye by circles
-        if (left[0].y - left[1].y) < 0.006:
-            pyautogui.click() #actual click
-            pyautogui.sleep(1) #sleep after click
         right = [landmarks[475], landmarks[477]] #top and bottom right eye
         for landmark in right:
             x = int(landmark.x * frame_w)
             y = int(landmark.y * frame_h)
             cv2.circle(frame,(x,y), 3, (0, 0, 255)) #mark left eye by circles
-        if (right[0].y - right[1].y) < 0.006:
+        for landmark in left:
+            x = int(landmark.x * frame_w)
+            y = int(landmark.y * frame_h)
+            cv2.circle(frame,(x,y), 3, (0, 255, 255)) #mark left eye by circles
+        if (left[0].y - left[1].y) < 0.005:
+            pyautogui.click() #actual click
+            pyautogui.sleep(1) #sleep after click
+        elif (right[0].y - right[1].y) < 0.005:
             pyautogui.click(button='right') #actual right click
-            pyautogui.sleep(5) #sleep after click
+            pyautogui.sleep(1) #sleep after click
     cv2.imshow('Eye Control Mouse', frame) #show some image called eye control mouse
     cv2.waitKey(1) #wait for a key if i press a key, wait for 1 key
